@@ -2,6 +2,7 @@ import torch
 from torchvision import datasets,transforms
 import torch.nn as nn
 from encoder import auto_Encoder
+import time
 
 BATCH_SIZE = 1000
 epoch = 20
@@ -18,15 +19,19 @@ auto_E = auto_Encoder().to(DEVICE)
 optimizer = torch.optim.SGD(auto_E.parameters(),lr=learning_rate)
 citizerion = nn.BCELoss()
 
+
 for i in range(epoch):
+    a = time.time()
     for index,(img,_) in enumerate(dataloader):
         x = img.view(-1,28*28).to(DEVICE)
         latent,output = auto_E(x)
         loss = citizerion(output,x)
         loss.backward()
         optimizer.step()
+
         if index%10==9:
-            print("epoch={},batch={},loss={:.4f}".format(i,index,loss))
+            b = time.time()
+            print("epoch={},batch={},loss={:.4f},speed={:.6f}/10个batch".format(i,index,loss,index/(b-a)))
     torch.save(auto_E.state_dict(),'./')
 
 
