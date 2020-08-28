@@ -27,7 +27,7 @@ for i in range(epoch):
         optimizer.step()
         if index%10==9:
             print("epoch={},batch={},loss={:.4f}".format(i,index,loss))
-    torch.save(auto_E.state_dict(),'./')
+    torch.save(auto_E.state_dict(),"epoch{}".format(i))
 
 
 
